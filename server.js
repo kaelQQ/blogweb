@@ -4,7 +4,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
 
+// Load environment variables from .env file
 dotenv.config();
+
 const app = express();
 
 // Middleware
@@ -20,15 +22,25 @@ app.use((err, req, res, next) => {
 
 // MongoDB Connection with detailed logging
 const connectDB = async () => {
+  // Get MongoDB URI from environment variable or use default local URI
+  const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/blogdb';
+  
   try {
     console.log('Attempting to connect to MongoDB...');
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/blogdb', {
+    console.log('Using database URL:', mongoURI.replace(/\/\/([^:]+):([^@]+)@/, '//<credentials hidden>@')); // Hide credentials if present
+    
+    await mongoose.connect(mongoURI, {
       serverSelectionTimeoutMS: 5000,
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
     console.log('Successfully connected to MongoDB');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    console.error('Full error:', err);
+    console.error('Please check if:');
+    console.error('1. MongoDB is installed and running');
+    console.error('2. The connection URL in .env file is correct');
+    console.error('3. MongoDB is listening on the default port (27017)');
     process.exit(1);
   }
 };
