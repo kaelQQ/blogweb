@@ -90,6 +90,15 @@ Before running this project, make sure you have the following installed:
      }
      ```
 
+   Example post:
+   ```json
+   {
+       "title": "My blog",
+       "content": "Skkkkkkkkrrrrrrtttttt",
+       "author": "Kael Quino"
+   }
+   ```
+
 ## Need Help?
 
 If you encounter any issues:
