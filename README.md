@@ -57,8 +57,8 @@ POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-    "title": "First Blog Post",
-    "content": "This is my first blog post!",
-    "author": "John Doe"
+    "title": "My blog",
+    "content": "Skkkkkkkkrrrrrrtttttt",
+    "author": "Kael Quino"
 }
 ```
