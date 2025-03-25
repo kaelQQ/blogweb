@@ -21,10 +21,32 @@ const commentSchema = new mongoose.Schema({
 const Post = mongoose.model('Post', postSchema);
 const Comment = mongoose.model('Comment', commentSchema);
 
-// GET all posts
-router.get('/', async (req, res) => {
+// Create a new post
+router.post('/', async (req, res) => {
+  const { title, content, author, tags, category } = req.body;
   try {
-    const posts = await Post.find().sort({ createdAt: -1 });
+    const newPost = new Post({ title, content, author, tags, category });
+    await newPost.save();
+    res.status(201).json({ message: 'Post created successfully', post: newPost });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET all posts or filter by tags and categories
+router.get('/', async (req, res) => {
+  const { tags, category } = req.query;
+  const filter = {};
+
+  if (tags) {
+    filter.tags = { $in: tags.split(',').map(tag => tag.trim()) };
+  }
+  if (category) {
+    filter.category = category;
+  }
+
+  try {
+    const posts = await Post.find(filter).sort({ createdAt: -1 });
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -42,21 +64,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// CREATE post
-router.post('/', async (req, res) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author
-  });
-
-  try {
-    const newPost = await post.save();
-    res.status(201).json(newPost);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+module.exports = router;
 
 // UPDATE post
 router.put('/:id', async (req, res) => {
@@ -88,49 +96,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// John Gamali =CREATE a new comment
-router.post('/:id/comments', async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
-
-    const comment = new Comment({
-      postId: req.params.id,
-      author: req.body.author,
-      content: req.body.content
-    });
-
-    const newComment = await comment.save();
-    res.status(201).json(newComment);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// GET all comments for a post
-router.get('/:id/comments', async (req, res) => {
-  try {
-    const comments = await Comment.find({ postId: req.params.id }).sort({ createdAt: -1 });
-    res.json(comments);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// DELETE a comment
-router.delete('/comments/:commentId', async (req, res) => {
-  try {
-    const comment = await Comment.findById(req.params.commentId);
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
-
-    await comment.deleteOne();
-    res.json({ message: 'Comment deleted' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// John Gamali =CREATE a new comment
+// John Gamali = CREATE a new comment
 router.post('/:id/comments', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);

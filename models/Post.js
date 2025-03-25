@@ -13,6 +13,14 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: 'Anonymous'
   },
+  tags: {
+    type: [String],
+    default: []
+  },
+  category: {
+    type: String,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

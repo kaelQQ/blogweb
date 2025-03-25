@@ -72,6 +72,13 @@ Before running this project, make sure you have the following installed:
 - `PUT /api/posts/:id` - Update a post
 - `DELETE /api/posts/:id` - Delete a post
 
+### Filtering Options
+
+- `GET /api/posts?tags=tech` - Get posts with a specific tag
+- `GET /api/posts?tags=tech,blog` - Get posts with multiple tags
+- `GET /api/posts?category=Technology` - Get posts under a specific category
+- `GET /api/posts?tags=blog&category=Technology` - Get posts with both specific tags and category
+
 ## Testing the API
 
 1. **Using the Web Interface**
