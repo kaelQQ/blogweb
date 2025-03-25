@@ -64,6 +64,20 @@
         .delete-btn:hover {
             background-color: #da190b;
         }
+        .comments {
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 2px solid #ddd;
+        }
+        .comment {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .comment-form {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -161,7 +175,55 @@
             }
         }
 
-        // Display posts in the UI
+        // gams = views and likes   
+        async function likePost(id) {
+            try {
+                await fetch(`http://localhost:3000/api/posts/${id}/like`, { method: 'POST' });
+                getPosts();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function incrementView(id) {
+            try {
+                await fetch(`http://localhost:3000/api/posts/${id}/view`, { method: 'POST' });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+
+        // John Gamali = Add a comment to a post
+        async function addComment(postId) {
+            const author = document.getElementById(`comment-author-${postId}`).value;
+            const content = document.getElementById(`comment-content-${postId}`).value;
+
+            if (!author || !content) {
+                alert('Please enter your name and comment');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ author, content })
+                });
+
+                if (response.ok) {
+                    alert('Comment added!');
+                    getPosts();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding comment');
+            }
+        }
+
+        // Display posts and comments
         function displayPosts(posts) {
             const container = document.getElementById('posts-container');
             container.innerHTML = '';
@@ -176,8 +238,41 @@
                     <div class="post-actions">
                         <button class="delete-btn" onclick="deletePost('${post._id}')">Delete</button>
                     </div>
+                    <div class="comments" id="comments-${post._id}">
+                        <h4>Comments</h4>
+                        <div class="comment-form">
+                            <input type="text" id="comment-author-${post._id}" placeholder="Your Name">
+                            <input type="text" id="comment-content-${post._id}" placeholder="Your Comment">
+                            <button onclick="addComment('${post._id}')">Post Comment</button>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(postElement);
+
+                // Fetch comments for each post
+                getComments(post._id);
+            });
+        }
+
+        // Get comments for a post
+        async function getComments(postId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+                const comments = await response.json();
+                displayComments(postId, comments);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Display comments for a post
+        function displayComments(postId, comments) {
+            const commentSection = document.getElementById(`comments-${postId}`);
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `<strong>${comment.author}:</strong> ${comment.content}`;
+                commentSection.appendChild(commentElement);
             });
         }
 
