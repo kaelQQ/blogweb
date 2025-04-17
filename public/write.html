@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Story - Monolog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">Monolog</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#posts">Posts</a>
+                <a href="/write.html" class="active">Write</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Share Your Story</h1>
+        <p>Express yourself and connect with readers around the world.</p>
+    </div>
+
+    <div class="container">
+        <div class="create-post" id="create">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" required placeholder="Give your story a great title">
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" rows="8" required placeholder="Tell your story..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags (comma separated)</label>
+                <input type="text" id="tags" placeholder="e.g., tech, blog, tutorial">
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" required placeholder="e.g., Technology">
+            </div>
+            <button onclick="createPost()" class="primary-button">Publish Story</button>
+        </div>
+    </div>
+
+    <script>
+        async function createPost() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const author = document.getElementById('author').value;
+            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+            const category = document.getElementById('category').value;
+
+            if (!title || !content || !author || !category) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title,
+                        content,
+                        author,
+                        tags,
+                        category
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Post created successfully!');
+                    window.location.href = '/'; // Redirect to home page
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to create post');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error creating post: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

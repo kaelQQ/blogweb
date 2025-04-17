@@ -3,118 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog API Tester</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #posts {
-            margin-top: 20px;
-        }
-        .post {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        .post-actions {
-            margin-top: 10px;
-        }
-        .delete-btn {
-            background-color: #f44336;
-        }
-        .delete-btn:hover {
-            background-color: #da190b;
-        }
-        .comments {
-            margin-top: 10px;
-            padding-left: 15px;
-            border-left: 2px solid #ddd;
-        }
-        .comment {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-        .comment-form {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Monolog - Share Your Stories</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Blog API Tester</h1>
-        
-        <!-- Create Post Form -->
-        <div class="form-group">
-            <h2>Create New Post</h2>
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" required>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">Monolog</a>
+            <div class="nav-links">
+                <a href="/" class="active">Home</a>
+                <a href="/#posts">Posts</a>
+                <a href="/write.html">Write</a>
             </div>
-            <div class="form-group">
-                <label for="content">Content:</label>
-                <textarea id="content" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" id="author" required>
-            </div>
-            <div class="form-group">
-                <label for="tags">Tags (comma separated):</label>
-                <input type="text" id="tags" placeholder="e.g., tech, blog, tutorial">
-            </div>
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <input type="text" id="category" required placeholder="e.g., Technology">
-            </div>
-            <button onclick="createPost()">Create Post</button>
         </div>
+    </nav>
 
+    <div class="hero">
+        <h1>Welcome to Monolog</h1>
+        <p>Share your stories, ideas, and experiences with the world.</p>
+    </div>
+
+    <div class="container">
+        
         <!-- Posts List -->
         <div id="posts">
-            <h2>Posts</h2>
-            <button onclick="getPosts()">Refresh Posts</button>
-            <div id="posts-container"></div>
+            <h2>Latest Stories</h2>
+            <button onclick="getPosts()">Refresh Stories</button>
+            <div class="posts-list" id="posts-container"></div>
         </div>
     </div>
 
@@ -267,22 +184,46 @@
                     : 'No tags';
                 
                 postElement.innerHTML = `
-                    <h3>${post.title}</h3>
-                    <p>${post.content}</p>
-                    <small>
-                        By: ${post.author || 'Anonymous'} | 
-                        Category: ${post.category || 'Uncategorized'} | 
-                        Tags: ${tagsDisplay}
-                    </small>
-                    <div class="post-actions">
-                        <button class="delete-btn" onclick="deletePost('${post._id}')">Delete</button>
-                    </div>
-                    <div class="comments" id="comments-${post._id}">
-                        <h4>Comments</h4>
-                        <div class="comment-form">
-                            <input type="text" id="comment-author-${post._id}" placeholder="Your Name">
-                            <input type="text" id="comment-content-${post._id}" placeholder="Your Comment">
-                            <button onclick="addComment('${post._id}')">Post Comment</button>
+                    <img src="https://source.unsplash.com/featured/400x300?blog,${post.category.toLowerCase()}" alt="${post.title}" class="post-image">
+                    <div class="post-content">
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.content.substring(0, 150)}${post.content.length > 150 ? '...' : ''}</p>
+                        <div class="post-metadata">
+                            <div class="post-author">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.author || 'Anonymous')}&background=random" alt="${post.author}" class="author-avatar">
+                                <span>${post.author || 'Anonymous'}</span>
+                            </div>
+                            <div class="post-info">
+                                <span>${post.category || 'Uncategorized'}</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <div class="interaction-buttons">
+                                <button class="heart-button" onclick="toggleHeart('${post._id}')">
+                                    <i class="fas fa-heart"></i>
+                                    <span class="heart-count" id="heart-count-${post._id}">0</span>
+                                </button>
+                                <button class="comment-button" onclick="toggleComments('${post._id}')">
+                                    <i class="fas fa-comment"></i>
+                                    <span class="comment-count" id="comment-count-${post._id}">0</span>
+                                </button>
+                            </div>
+                            <button class="edit-btn" onclick="editPost('${post._id}')">Edit</button>
+                            <button class="delete-btn" onclick="deletePost('${post._id}')">Delete</button>
+                        </div>
+                        <div class="comments-section" id="comments-${post._id}">
+                            <div class="comments-section-content">
+                                <h4>Discussion</h4>
+                                <div class="comments-list"></div>
+                            </div>
+                            <div class="comment-form">
+                                <h5 class="comment-form-title">Leave a Comment</h5>
+                                <div class="comment-form-fields">
+                                    <input type="text" id="comment-author-${post._id}" placeholder="Your Name" required>
+                                    <textarea id="comment-content-${post._id}" placeholder="Share your thoughts..." rows="3" required></textarea>
+                                    <button onclick="addComment('${post._id}')">Post Comment</button>
+                                </div>
+                            </div>
                         </div>
                     </div>`;
                 container.appendChild(postElement);
@@ -303,13 +244,42 @@
 
         // Display comments for a post
         function displayComments(postId, comments) {
-            const commentSection = document.getElementById(`comments-${postId}`);
+            const commentsList = document.querySelector(`#comments-${postId} .comments-list`);
+            const commentCount = document.querySelector(`#comment-count-${postId}`);
+            commentsList.innerHTML = ''; // Clear existing comments
+            commentCount.textContent = comments.length;
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+                return;
+            }
+
             comments.forEach(comment => {
                 const commentElement = document.createElement('div');
                 commentElement.className = 'comment';
-                commentElement.innerHTML = `<strong>${comment.author}:</strong> ${comment.content}`;
-                commentSection.appendChild(commentElement);
+                commentElement.innerHTML = `
+                    <div class="comment-author">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&background=random" alt="${comment.author}">
+                        ${comment.author}
+                    </div>
+                    <div class="comment-content">${comment.content}</div>`;
+                commentsList.appendChild(commentElement);
             });
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.querySelector(`#comments-${postId}`);
+            commentsSection.classList.toggle('active');
+        }
+
+        function toggleHeart(postId) {
+            const heartButton = event.currentTarget;
+            const heartCount = document.querySelector(`#heart-count-${postId}`);
+            const isActive = heartButton.classList.toggle('active');
+            
+            // In a real app, you'd update this on the server
+            const currentCount = parseInt(heartCount.textContent);
+            heartCount.textContent = isActive ? currentCount + 1 : currentCount - 1;
         }
 
         // Load posts when page loads
