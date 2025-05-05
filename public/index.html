@@ -17,8 +17,62 @@
                 <a href="/#posts">Posts</a>
                 <a href="/write.html">Write</a>
             </div>
-        </div>
+        </div>      
     </nav>
+<body>
+    <div id="sidebar" class="sidebar">
+        <button id="close-sidebar" class="close-btn">&times;</button>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about" onclick="showAbout()">About</a></li>
+        </ul>
+        <div id="about-section" class="sidebar-content" style="display: none;">
+            <h3>About Monolog</h3>
+            <p>Monolog is a platform where you can share your stories, ideas, and experiences with the world. Our mission is to connect people through the power of storytelling.</p>
+            
+            <h3>Contact Us</h3>
+            <p>If you have any questions, feedback, or suggestions, feel free to reach out to us:</p>
+            <ul>
+                <li>Email: support@monolog.com</li>
+                <li>Phone: +63 (945) 213-9935</li>
+                <li>Address: USTP, Cagayan de Oro City</li>
+            </ul>
+        </div>
+    </div>
+    <button id="open-sidebar" class="open-btn">☰ Open Sidebar</button>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+    
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.style.width = '250px';
+        });
+    
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.style.width = '0';
+        });
+    
+        // Add the showAbout function here
+        function showAbout() {
+            const aboutSection = document.getElementById('about-section');
+            aboutSection.style.display = aboutSection.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    <div id="sidebar" class="sidebar">
+        <button id="close-sidebar" class="close-btn">&times;</button>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about" onclick="showAbout()">About & Contact</a></li>
+        </ul>
+        <div id="about-section" class="sidebar-content" style="display: none;">
+            <h3>About Monolog</h3>
+            <p>Monolog is a platform where you can share your stories, ideas, and experiences with the world. Our mission is to connect people through the power of storytelling.</p>
+        </div>
+    </div>
+</body>
 
     <div class="hero">
         <h1>Welcome to Monolog</h1>
@@ -184,7 +238,7 @@
                     : 'No tags';
                 
                 postElement.innerHTML = `
-                    <img src="https://source.unsplash.com/featured/400x300?blog,${post.category.toLowerCase()}" alt="${post.title}" class="post-image">
+                    <img src="https://source.unsplash.com/featured/400x300?blog,${(post.category || 'uncategorized').toLowerCase()}" alt="${post.title}" class="post-image">
                     <div class="post-content">
                         <h3 class="post-title">${post.title}</h3>
                         <p class="post-excerpt">${post.content.substring(0, 150)}${post.content.length > 150 ? '...' : ''}</p>
@@ -281,9 +335,20 @@
             const currentCount = parseInt(heartCount.textContent);
             heartCount.textContent = isActive ? currentCount + 1 : currentCount - 1;
         }
+        async function toggleHeart(postId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/posts/${postId}/like`, { method: 'POST' });
+                const updatedPost = await response.json();
+                document.getElementById(`heart-count-${postId}`).textContent = updatedPost.likes || 0;
+            } catch (error) {
+                console.error('Error liking post:', error);
+            }
+        }
+
 
         // Load posts when page loads
         window.onload = getPosts;
+
     </script>
 </body>
 </html>

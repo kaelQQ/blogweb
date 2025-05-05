@@ -152,4 +152,24 @@ router.delete('/comments/:commentId', async (req, res) => {
   }
 });
 
+// GET sidebar content: categories, tags, recent posts
+router.get('/sidebar/content', async (req, res) => {
+  try {
+    const categories = await Post.distinct('category');
+    const tags = await Post.distinct('tags');
+    const recentPosts = await Post.find({}, 'title _id createdAt')
+                                  .sort({ createdAt: -1 })
+                                  .limit(5);
+
+    res.json({
+      categories,
+      tags,
+      recentPosts
+    });
+  } catch (err) {
+    console.error('Error fetching sidebar content:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
