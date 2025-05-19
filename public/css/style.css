@@ -4,8 +4,8 @@
     --secondary-color: #A4133C;
     --accent-color: #FFB845;
     --background-color: #FFF5F5;
-    --text-color: #800020;
-    --light-gray: #F5E6E8;
+    --text-color: #333; /* Darker text for better readability */
+    --light-gray: #ddd;
     --white: #FFFFFF;
     --light-maroon: #FFF0F3;
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -113,6 +113,14 @@ body {
     opacity: 0.9;
 }
 
+#posts h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 .posts-list {
     display: flex;
     flex-direction: column;
@@ -123,7 +131,7 @@ body {
     margin-right: auto;
 }
 
-.post-card {
+.post-card { /* Renamed from .post */
     background: var(--white);
     border-radius: 12px;
     overflow: hidden;
@@ -327,6 +335,15 @@ button:hover {
     transform: translateY(-1px);
 }
 
+.edit-btn {
+    background-color: #4CAF50; /* Green for edit */
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
 .delete-btn {
     background-color: #FF6B6B;
 }
@@ -343,7 +360,8 @@ button:hover {
     border-radius: 8px;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     width: 100%;
-    display: none;
+    display: none; /* Controlled by JS toggleComments */
+    flex-direction: column; /* Changed to column for better comment layout */
     gap: 1.5rem;
 }
 
@@ -371,123 +389,173 @@ button:hover {
     padding-right: 0.5rem;
 }
 
-.comments-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.comments-list::-webkit-scrollbar-track {
-    background: var(--light-maroon);
-}
-
-.comments-list::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-.comment {
-    background-color: var(--white);
+.comment-item { /* Renamed from .comment */
+    background: var(--white);
     padding: 1rem;
     border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
-    font-size: 0.95rem;
-}
-
-.comment:hover {
-    transform: translateX(5px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .comment-author {
     font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.25rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .comment-author img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
 }
 
-.comment-content {
-    color: #636E72;
-    line-height: 1.6;
+.comment-content { /* Renamed from .comment-text */
+    font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .comment-form {
-    flex: 1;
-    background: var(--white);
-    padding: 1rem;
-    border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 1.5rem;
-    align-self: flex-start;
-    min-width: 280px;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--light-gray);
 }
 
 .comment-form-title {
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    color: var(--primary-color);
-}
-
-.comment-form-fields {
-    display: grid;
-    gap: 1rem;
-}
-
-.comment-form input,
-.comment-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--light-gray);
-    border-radius: 4px;
     font-family: var(--font-main);
-    transition: border-color 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
 }
 
-.comment-form input:focus,
-.comment-form textarea:focus {
-    outline: none;
-    border-color: var(--secondary-color);
+.comment-form-fields input,
+.comment-form-fields textarea {
+    margin-bottom: 0.75rem;
 }
 
-.comment-form button {
-    background-color: var(--secondary-color);
-    margin-top: 1rem;
-    width: auto;
-}
-
+/* Responsive tweaks */
 @media (max-width: 768px) {
-    .posts-grid {
+    .posts-grid { /* This class doesn't seem to be used in your HTML, consider removing or adding */
         grid-template-columns: 1fr;
     }
-    
+
     .navbar-container {
         flex-direction: column;
         gap: 1rem;
+        padding: 0 1rem; /* Adjust padding for smaller screens */
     }
-    
+
     .nav-links {
         flex-direction: column;
         text-align: center;
         gap: 1rem;
     }
-    
+
     .hero h1 {
         font-size: 2rem;
     }
-    
+
     .hero p {
         font-size: 1rem;
     }
+
+    .post-content {
+        padding: 1.5rem; /* Adjust padding for smaller screens */
+    }
+
+    .post-title {
+        font-size: 1.5rem;
+    }
+
+    .comments-section {
+        flex-direction: column;
+    }
 }
+
+/* Sort Feature Container */
+.sort-container {
+    max-width: 800px;
+    margin: 1rem auto 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-main);
+    color: var(--primary-color);
+}
+
+/* Sort Label */
+.sort-container label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    user-select: none;
+}
+
+/* Sort Select Dropdown */
+.sort-container select {
+    flex-grow: 1; /* Allow select to take available space */
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: var(--font-main);
+    color: var(--primary-color);
+    background-color: var(--light-maroon);
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    appearance: none; /* Remove default dropdown arrow */
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M9.293%2012.95l.707.707L15.657%208l-1.414-1.414L10%2010.828%206.343%207.172%204.93%208.586z%22%20fill%3D%22%23800020%22%2F%3E%3C%2Fsvg%3E'); /* Custom dropdown arrow */
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+}
+
+.sort-container select:hover,
+.sort-container select:focus {
+    border-color: var(--secondary-color);
+    background-color: var(--white);
+    outline: none;
+}
+
+/* Sort Button */
+.sort-container button {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sort-container button:hover {
+    background-color: #e6a332; /* slightly darker accent */
+    transform: translateY(-2px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+    .sort-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    .sort-container button {
+        width: 100%;
+    }
+}
+
 /* Sidebar styles */
 .sidebar {
     height: 100%;
@@ -500,6 +568,9 @@ button:hover {
     transition: 0.5s;
     padding-top: 60px;
     z-index: 1000;
+    color: #f1f1f1; /* Ensure text is visible on dark background */
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar a {
@@ -530,15 +601,24 @@ button:hover {
 .open-btn {
     font-size: 20px;
     cursor: pointer;
-    background-color: #111;
-    color: white;
+    background-color: var(--primary-color); /* Match navbar color */
+    color: var(--white);
     border: none;
     padding: 10px 15px;
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 1rem; /* Adjust position */
+    left: 1rem; /* Adjust position */
     z-index: 1001;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
 }
+
+.open-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+
 /* About and Comments section */
 .sidebar-content {
     padding: 15px;
@@ -546,17 +626,20 @@ button:hover {
     font-size: 14px;
     line-height: 1.6;
     text-align: justify;
-    display: none; /* Default hidden */
+    display: block; /* Default to block, hide about section with inline style for initial state */
+    margin-bottom: 15px; /* Spacing between sidebar sections */
 }
 
-.sidebar-content.active {
-    display: block; /* Show when active */
+.sidebar-content:last-child {
+    margin-bottom: 0;
 }
+
 
 .sidebar-content h3 {
     font-size: 18px;
     margin-bottom: 10px;
     color: #ffcc00; /* Highlight the heading */
+    font-family: var(--font-heading);
 }
 
 .sidebar-content ul {
@@ -566,7 +649,40 @@ button:hover {
 }
 
 .sidebar-content ul li {
-    margin-bottom: 10px;
-    color: #f1f1f1;
+    margin-bottom: 8px;
+    color: #ccc;
     font-size: 14px;
+}
+
+.sidebar-content ul li a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0; /* Remove padding from sidebar links to avoid extra spacing */
+    display: inline; /* Keep links inline within list items */
+}
+
+.sidebar-content ul li a:hover {
+    color: var(--accent-color);
+}
+
+.sidebar-content #sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.sidebar-content .tag {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-content .tag:hover {
+    background-color: #8B0000;
 }
