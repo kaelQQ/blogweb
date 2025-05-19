@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Monolog - Share Your Stories</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
 </head>
 <body>
     <nav class="navbar">
@@ -14,53 +14,11 @@
             <a href="/" class="logo">Monolog</a>
             <div class="nav-links">
                 <a href="/" class="active">Home</a>
-                <a href="/#posts">Posts</a>
                 <a href="/write.html">Write</a>
             </div>
-        </div>      
-    </nav>
-<body>
-    <div id="sidebar" class="sidebar">
-        <button id="close-sidebar" class="close-btn">&times;</button>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about" onclick="showAbout()">About</a></li>
-        </ul>
-        <div id="about-section" class="sidebar-content" style="display: none;">
-            <h3>About Monolog</h3>
-            <p>Monolog is a platform where you can share your stories, ideas, and experiences with the world. Our mission is to connect people through the power of storytelling.</p>
-            
-            <h3>Contact Us</h3>
-            <p>If you have any questions, feedback, or suggestions, feel free to reach out to us:</p>
-            <ul>
-                <li>Email: support@monolog.com</li>
-                <li>Phone: +63 (945) 213-9935</li>
-                <li>Address: USTP, Cagayan de Oro City</li>
-            </ul>
         </div>
-    </div>
-    <button id="open-sidebar" class="open-btn">☰ Open Sidebar</button>
+    </nav>
 
-    <script>
-        // Sidebar toggle functionality
-        const sidebar = document.getElementById('sidebar');
-        const openSidebarBtn = document.getElementById('open-sidebar');
-        const closeSidebarBtn = document.getElementById('close-sidebar');
-    
-        openSidebarBtn.addEventListener('click', () => {
-            sidebar.style.width = '250px';
-        });
-    
-        closeSidebarBtn.addEventListener('click', () => {
-            sidebar.style.width = '0';
-        });
-    
-        // Add the showAbout function here
-        function showAbout() {
-            const aboutSection = document.getElementById('about-section');
-            aboutSection.style.display = aboutSection.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
     <div id="sidebar" class="sidebar">
         <button id="close-sidebar" class="close-btn">&times;</button>
         <ul>
@@ -70,9 +28,28 @@
         <div id="about-section" class="sidebar-content" style="display: none;">
             <h3>About Monolog</h3>
             <p>Monolog is a platform where you can share your stories, ideas, and experiences with the world. Our mission is to connect people through the power of storytelling.</p>
+            <h3>Contact Us</h3>
+            <p>If you have any questions, feedback, or suggestions, feel free to reach out to us:</p>
+            <ul>
+                <li>Email: support@monolog.com</li>
+                <li>Phone: +63 (945) 213-9935</li>
+                <li>Address: USTP, Cagayan de Oro City</li>
+            </ul>
+        </div>
+        <div class="sidebar-content">
+            <h3>Categories</h3>
+            <ul id="sidebar-categories"></ul>
+        </div>
+        <div class="sidebar-content">
+            <h3>Tags</h3>
+            <div id="sidebar-tags"></div>
+        </div>
+        <div class="sidebar-content">
+            <h3>Recent Posts</h3>
+            <ul id="sidebar-recent-posts"></ul>
         </div>
     </div>
-</body>
+    <button id="open-sidebar" class="open-btn">☰ Open Sidebar</button>
 
     <div class="hero">
         <h1>Welcome to Monolog</h1>
@@ -80,163 +57,60 @@
     </div>
 
     <div class="container">
-        
-        <!-- Posts List -->
-        <div id="posts">
-            <h2>Latest Stories</h2>
-            <button onclick="getPosts()">Refresh Stories</button>
-            <div class="posts-list" id="posts-container"></div>
+    <div id="posts">
+        <h2>Latest Stories</h2>
+        <div class="sort-container">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select">
+                <option value="createdAt-desc">Newest</option>
+                <option value="createdAt-asc">Oldest</option>
+                <option value="title-asc">Title A–Z</option>
+                <option value="title-desc">Title Z–A</option>
+                <option value="author-asc">Author A–Z</option>
+                <option value="author-desc">Author Z–A</option>
+                <option value="category-asc">Category A–Z</option>
+                <option value="category-desc">Category Z–A</option>
+            </select>
+            <button onclick="getPosts()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
         </div>
+        <div class="posts-list" id="posts-container"></div>
     </div>
+</div>
 
     <script>
-        // Get all posts
-        async function getPosts() {
-            try {
-                const response = await fetch('http://localhost:3000/api/posts');
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to fetch posts');
-                }
-                const posts = await response.json();
-                if (!Array.isArray(posts)) {
-                    throw new Error('Invalid response format');
-                }
-                displayPosts(posts);
-            } catch (error) {
-                console.error('Error details:', error);
-                alert('Error fetching posts: ' + error.message);
-            }
+        // SIDEBAR
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.style.width = '250px';
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.style.width = '0';
+        });
+
+        function showAbout() {
+            const aboutSection = document.getElementById('about-section');
+            // Toggle the display of the about section.
+            // Using a class `active` in CSS is often cleaner for display toggling.
+            aboutSection.classList.toggle('active');
         }
 
-        // Create a new post
-        async function createPost() {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            const author = document.getElementById('author').value;
-            const tagsInput = document.getElementById('tags').value.trim();
-            const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : [];
-            const category = document.getElementById('category').value.trim();
-
-            if (!title || !content || !author || !category) {
-                alert('Please fill in all required fields');
-                return;
-            }
-
-            const postData = { title, content, author, tags, category };
-            console.log('Sending post data:', postData);
-
-            try {
-                const response = await fetch('http://localhost:3000/api/posts', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData)
-                });
-
-                const responseData = await response.json();
-                console.log('Server response:', responseData);
-
-                if (response.ok) {
-                    alert('Post created successfully!');
-                    // Clear the form
-                    document.getElementById('title').value = '';
-                    document.getElementById('content').value = '';
-                    document.getElementById('author').value = '';
-                    document.getElementById('tags').value = '';
-                    document.getElementById('category').value = '';
-                    getPosts();
-                } else {
-                    throw new Error(responseData.message || 'Failed to create post');
-                }
-            } catch (error) {
-                console.error('Error details:', error);
-                alert('Error creating post: ' + error.message);
-            }
-        }
-
-        // Delete a post
-        async function deletePost(id) {
-            if (confirm('Are you sure you want to delete this post?')) {
-                try {
-                    const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
-                        method: 'DELETE'
-                    });
-
-                    if (response.ok) {
-                        alert('Post deleted successfully!');
-                        getPosts();
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error deleting post');
-                }
-            }
-        }
-
-        // gams = views and likes   
-        async function likePost(id) {
-            try {
-                await fetch(`http://localhost:3000/api/posts/${id}/like`, { method: 'POST' });
-                getPosts();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        async function incrementView(id) {
-            try {
-                await fetch(`http://localhost:3000/api/posts/${id}/view`, { method: 'POST' });
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-
-        // John Gamali = Add a comment to a post
-        async function addComment(postId) {
-            const author = document.getElementById(`comment-author-${postId}`).value;
-            const content = document.getElementById(`comment-content-${postId}`).value;
-
-            if (!author || !content) {
-                alert('Please enter your name and comment');
-                return;
-            }
-
-            try {
-                const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ author, content })
-                });
-
-                if (response.ok) {
-                    alert('Comment added!');
-                    getPosts();
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error adding comment');
-            }
-        }
-
-        // Display posts and comments
+        // DISPLAY POSTS - Moved this function definition BEFORE getPosts()
         function displayPosts(posts) {
-            console.log('Displaying posts:', posts);
             const container = document.getElementById('posts-container');
             container.innerHTML = '';
 
             posts.forEach(post => {
                 const postElement = document.createElement('div');
-                postElement.className = 'post';
-                // Ensure tags is an array and has content before joining
-                const tagsDisplay = post.tags && Array.isArray(post.tags) && post.tags.length > 0 
-                    ? post.tags.join(', ') 
-                    : 'No tags';
-                
+                postElement.className = 'post-card';
+
+                const tagsDisplay = post.tags?.length ? post.tags.join(', ') : 'No tags';
+
                 postElement.innerHTML = `
                     <img src="https://source.unsplash.com/featured/400x300?blog,${(post.category || 'uncategorized').toLowerCase()}" alt="${post.title}" class="post-image">
                     <div class="post-content">
@@ -255,7 +129,7 @@
                             <div class="interaction-buttons">
                                 <button class="heart-button" onclick="toggleHeart('${post._id}')">
                                     <i class="fas fa-heart"></i>
-                                    <span class="heart-count" id="heart-count-${post._id}">0</span>
+                                    <span class="heart-count" id="heart-count-${post._id}">${post.likes || 0}</span>
                                 </button>
                                 <button class="comment-button" onclick="toggleComments('${post._id}')">
                                     <i class="fas fa-comment"></i>
@@ -285,24 +159,42 @@
             });
         }
 
-        // Get comments for a post
+        // GET POSTS - Now displayPosts is defined before this is called
+        async function getPosts() {
+            try {
+                const sortValue = document.getElementById('sort-select')?.value || 'createdAt-desc'; // Default to newest
+                const [sortBy, order] = sortValue.split('-');
+                const response = await fetch(`http://localhost:3000/api/posts?sortBy=${sortBy}&order=${order}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch posts');
+                }
+                const posts = await response.json();
+                if (!Array.isArray(posts)) throw new Error('Invalid response format');
+                displayPosts(posts);
+            } catch (error) {
+                console.error('Error fetching posts:', error); // Changed message for clarity
+                alert('Error fetching posts: ' + error.message);
+            }
+        }
+
+        // COMMENTS (These can stay where they are as they are called after displayPosts)
         async function getComments(postId) {
             try {
                 const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
                 const comments = await response.json();
                 displayComments(postId, comments);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error fetching comments:', error);
             }
         }
 
-        // Display comments for a post
         function displayComments(postId, comments) {
             const commentsList = document.querySelector(`#comments-${postId} .comments-list`);
             const commentCount = document.querySelector(`#comment-count-${postId}`);
-            commentsList.innerHTML = ''; // Clear existing comments
+            commentsList.innerHTML = '';
             commentCount.textContent = comments.length;
-            
+
             if (comments.length === 0) {
                 commentsList.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
                 return;
@@ -310,7 +202,7 @@
 
             comments.forEach(comment => {
                 const commentElement = document.createElement('div');
-                commentElement.className = 'comment';
+                commentElement.className = 'comment-item';
                 commentElement.innerHTML = `
                     <div class="comment-author">
                         <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&background=random" alt="${comment.author}">
@@ -321,34 +213,163 @@
             });
         }
 
-        function toggleComments(postId) {
-            const commentsSection = document.querySelector(`#comments-${postId}`);
-            commentsSection.classList.toggle('active');
+        async function addComment(postId) {
+            const author = document.getElementById(`comment-author-${postId}`).value;
+            const content = document.getElementById(`comment-content-${postId}`).value;
+            if (!author || !content) {
+                alert('Please enter your name and comment');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/posts/${postId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ author, content })
+                });
+
+                if (response.ok) {
+                    alert('Comment added!');
+                    // Instead of full getPosts(), just refresh comments for efficiency
+                    getComments(postId);
+                    document.getElementById(`comment-content-${postId}`).value = ''; // Clear comment input
+                    document.getElementById(`comment-author-${postId}`).value = ''; // Clear author input
+                } else {
+                     const errorData = await response.json();
+                     throw new Error(errorData.message || 'Failed to add comment');
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                alert('Error adding comment: ' + error.message);
+            }
         }
 
-        function toggleHeart(postId) {
-            const heartButton = event.currentTarget;
-            const heartCount = document.querySelector(`#heart-count-${postId}`);
-            const isActive = heartButton.classList.toggle('active');
-            
-            // In a real app, you'd update this on the server
-            const currentCount = parseInt(heartCount.textContent);
-            heartCount.textContent = isActive ? currentCount + 1 : currentCount - 1;
-        }
         async function toggleHeart(postId) {
             try {
                 const response = await fetch(`http://localhost:3000/api/posts/${postId}/like`, { method: 'POST' });
+                // Assuming your backend sends back the updated post with new like count
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to like post');
+                }
                 const updatedPost = await response.json();
                 document.getElementById(`heart-count-${postId}`).textContent = updatedPost.likes || 0;
             } catch (error) {
                 console.error('Error liking post:', error);
+                alert('Error liking post: ' + error.message);
             }
         }
 
+        function toggleComments(postId) {
+            const commentsSection = document.querySelector(`#comments-${postId}`);
+            commentsSection.classList.toggle('active');
+            // If comments section is now active, fetch comments
+            if (commentsSection.classList.contains('active')) {
+                getComments(postId);
+            }
+        }
 
-        // Load posts when page loads
-        window.onload = getPosts;
+        async function editPost(id) {
+            // This function needs to be implemented.
+            // You'll likely want to redirect to a /write.html?edit=ID page
+            // or open a modal with the post data pre-filled.
+            alert('Edit functionality not yet implemented for post: ' + id);
+            window.location.href = `/write.html?edit=${id}`; // Example redirect
+        }
 
+        async function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post? This cannot be undone.')) {
+                try {
+                    const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        alert('Post deleted successfully!');
+                        getPosts(); // Refresh the list of posts
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to delete post');
+                    }
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                    alert('Error deleting post: ' + error.message);
+                }
+            }
+        }
+
+        // FETCH SIDEBAR CONTENT
+        async function fetchSidebarContent() {
+            try {
+                const response = await fetch('http://localhost:3000/api/posts/sidebar/content');
+                if (!response.ok) {
+                    console.error('Failed to fetch sidebar content');
+                    return;
+                }
+                const data = await response.json();
+                displaySidebarContent(data);
+            } catch (error) {
+                console.error('Error fetching sidebar content:', error);
+            }
+        }
+
+        function displaySidebarContent(data) {
+            const categoriesList = document.getElementById('sidebar-categories');
+            const tagsContainer = document.getElementById('sidebar-tags');
+            const recentPostsList = document.getElementById('sidebar-recent-posts');
+
+            categoriesList.innerHTML = '';
+            data.categories.forEach(category => {
+                const li = document.createElement('li');
+                // For filtering by category, you'd add an event listener or link
+                li.innerHTML = `<a href="#" onclick="filterByCategory('${category}')">${category}</a>`;
+                categoriesList.appendChild(li);
+            });
+
+            tagsContainer.innerHTML = '';
+            data.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.textContent = tag;
+                // For filtering by tag, you'd add an event listener or link
+                span.onclick = () => filterByTag(tag);
+                tagsContainer.appendChild(span);
+            });
+
+            recentPostsList.innerHTML = '';
+            data.recentPosts.forEach(post => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `/#post-${post._id}`; // Consider a dedicated single post page in the future
+                a.textContent = post.title;
+                li.appendChild(a);
+                recentPostsList.appendChild(li);
+            });
+        }
+
+        // --- NEW FILTERING FUNCTIONS (to be implemented on backend/frontend) ---
+        function filterByCategory(category) {
+            alert(`Filtering by category: ${category}. (Backend implementation needed)`);
+            // You would then call getPosts() with a category filter parameter
+            // e.g., getPosts({ category: category });
+        }
+
+        function filterByTag(tag) {
+            alert(`Filtering by tag: ${tag}. (Backend implementation needed)`);
+            // You would then call getPosts() with a tags filter parameter
+            // e.g., getPosts({ tags: tag });
+        }
+
+
+        // Event listener for sort select dropdown
+        document.getElementById("sort-select").addEventListener("change", getPosts);
+
+        // Initial load of posts and sidebar content when the page loads
+        window.onload = () => {
+            getPosts();
+            fetchSidebarContent();
+        };
     </script>
 </body>
 </html>
