@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/Post');  // Import the Post model from models directory
+const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
 // Create a new post
@@ -8,14 +8,12 @@ router.post('/', async (req, res) => {
   try {
     const { title, content, author, tags, category } = req.body;
     
-    // Validate required fields
     if (!title || !content || !author || !category) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // Ensure tags is an array
     const processedTags = Array.isArray(tags) ? tags.filter(tag => tag.length > 0) : [];
-    
+
     const newPost = new Post({
       title,
       content,
@@ -35,9 +33,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET all posts or filter by tags and categories
+// GET all posts or filter by tags and categories, with optional sorting
+// Mosqueda - modified for sort function
 router.get('/', async (req, res) => {
-  const { tags, category } = req.query;
+  const { tags, category, sortBy = 'createdAt', order = 'desc' } = req.query;
   const filter = {};
 
   if (tags) {
@@ -47,8 +46,15 @@ router.get('/', async (req, res) => {
     filter.category = category;
   }
 
+  // Validate sort field and direction
+  const allowedSortFields = ['title', 'createdAt', 'author', 'category'];
+  const sortField = allowedSortFields.includes(sortBy) ? sortBy : 'createdAt';
+  const sortDirection = order === 'asc' ? 1 : -1;
+  const sortOption = {};
+  sortOption[sortField] = sortDirection;
+
   try {
-    const posts = await Post.find(filter).sort({ createdAt: -1 });
+    const posts = await Post.find(filter).sort(sortOption);
     console.log('Retrieved posts:', posts);
     res.json(posts);
   } catch (err) {
@@ -104,7 +110,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// John Gamali = CREATE a new comment
+// CREATE a new comment
 router.post('/:id/comments', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
