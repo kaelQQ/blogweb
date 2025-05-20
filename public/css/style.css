@@ -685,4 +685,35 @@ button:hover {
 
 .sidebar-content .tag:hover {
     background-color: #8B0000;
+}  
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto;
+  max-width: 500px;
+}
+
+.search-container input[type="text"] {
+  padding: 10px 15px;
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 25px 0 0 25px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-container button {
+  padding: 10px 15px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #333;
+  border-left: none;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+  background-color: #555;
 }
