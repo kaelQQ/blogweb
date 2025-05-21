@@ -1,6 +1,28 @@
-# Blog Web API
+# Monolog - Modern Blog Platform
 
-A simple blog API built with Express.js and MongoDB.
+A full-stack blog platform built with Node.js, Express, MongoDB, and modern frontend technologies. This platform allows users to read, write, and interact with blog posts in a clean, responsive interface.
+
+## ✨ Features
+
+- **Responsive Design**: Works on all devices with a mobile-first approach
+- **Modern UI/UX**: Clean and intuitive user interface with smooth animations
+- **Rich Text Editor**: Easy-to-use editor for creating and formatting blog posts
+- **Categories & Tags**: Organize content with categories and tags
+- **Search Functionality**: Find posts quickly with the search feature
+- **Comments & Interactions**: Engage with readers through comments
+- **Contact Page**: Easy way for users to get in touch
+- **Dark/Light Mode**: Built-in theme switcher (if implemented)
+
+## 🛠️ Tech Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Styling**: Custom CSS with CSS Variables for theming
+- **Icons**: Font Awesome 5
+- **Fonts**: Google Fonts (Inter, Playfair Display)
+- **Build Tools**: npm scripts
+- **Version Control**: Git & GitHub
 
 ## Prerequisites
 
@@ -19,6 +41,35 @@ Before running this project, make sure you have the following installed:
    - For Windows users:
      - Check Services app to verify MongoDB is running
      - Default installation path: `C:\Program Files\MongoDB\Server\<version>\bin`
+    
+## 📂 Project Structure
+
+```
+blogweb/
+├── public/                 # Static files
+│   ├── css/                # Stylesheets
+│   ├── js/                 # Client-side JavaScript
+│   ├── index.html          # Home page
+│   ├── about.html          # About page
+│   ├── write.html          # Post creation page
+│   └── contact.html        # Contact page
+├── models/                 # Database models
+├── routes/                 # API routes
+├── .env.example           # Environment variables example
+├── package.json           # Project dependencies
+└── server.js              # Main application file
+```
+
+## Styling
+
+The project uses modern CSS features including:
+- CSS Variables for theming
+- Flexbox and Grid for layouts
+- CSS Transitions for smooth animations
+- Responsive design principles
+- Custom form styling
+- Mobile-first approach
+
 
 ## Setup Instructions
 
