@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Story - Monolog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <div class="sidebar-actions">
+                <button class="collapse-sidebar" id="collapseSidebar" title="Collapse">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="close-sidebar" id="closeSidebar" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+            <a href="about.html" class="sidebar-link"><i class="fas fa-info-circle"></i> About</a>
+            <a href="write.html" class="sidebar-link active"><i class="fas fa-edit"></i> Write a Story</a>
+            <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+        </nav>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">Monolog</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="about.html">About</a>
+                <a href="write.html" class="active">Write a Story</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Share Your Story</h1>
+        <p>Express yourself and connect with readers around the world.</p>
+    </div>
+
+    <div class="container">
+        <div class="create-post" id="create">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" required placeholder="Give your story a great title">
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" rows="8" required placeholder="Tell your story..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags (comma separated)</label>
+                <input type="text" id="tags" placeholder="e.g., tech, blog, tutorial">
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" required placeholder="e.g., Technology">
+            </div>
+            <button onclick="createPost()" class="primary-button">Publish Story</button>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script>
+        // Make postId accessible to all functions
+        let postId = null;
+
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if we're editing an existing post
+            const urlParams = new URLSearchParams(window.location.search);
+            postId = urlParams.get('edit');
+            
+            // If we're editing, load the post data
+            if (postId) {
+                console.log('Loading post with ID:', postId);
+                document.querySelector('h1').textContent = 'Edit Your Story';
+                document.querySelector('.hero p').textContent = 'Update your story and share it with the world.';
+                document.querySelector('button.primary-button').textContent = 'Update Story';
+                
+                try {
+                    const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+                    console.log('Response status:', response.status);
+                    
+                    if (response.ok) {
+                        const post = await response.json();
+                        console.log('Post data received:', post);
+                        
+                        document.getElementById('title').value = post.title || '';
+                        document.getElementById('content').value = post.content || '';
+                        document.getElementById('author').value = post.author || '';
+                        document.getElementById('tags').value = post.tags ? post.tags.join(', ') : '';
+                        document.getElementById('category').value = post.category || '';
+                    } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || 'Failed to load post with status: ' + response.status);
+                    }
+                } catch (error) {
+                    console.error('Error loading post:', error);
+                    alert('Error loading post: ' + error.message);
+                }
+            }
+        });
+
+        async function createPost() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const author = document.getElementById('author').value;
+            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+            const category = document.getElementById('category').value;
+
+            if (!title || !content || !author || !category) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const postData = {
+                title,
+                content,
+                author,
+                tags,
+                category
+            };
+
+            try {
+                // Get postId from the URL if not already set
+                if (!postId) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    postId = urlParams.get('edit');
+                }
+                
+                const url = postId 
+                    ? `http://localhost:3000/api/posts/${postId}`
+                    : 'http://localhost:3000/api/posts';
+                
+                const method = postId ? 'PUT' : 'POST';
+                
+                console.log(`${method} request to:`, url);
+                console.log('Sending data:', postData);
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                if (response.ok) {
+                    alert(postId ? 'Post updated successfully!' : 'Post created successfully!');
+                    window.location.href = '/';
+                } else {
+                    const error = await response.json().catch(() => ({}));
+                    throw new Error(error.message || (postId ? 'Failed to update post' : 'Failed to create post'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

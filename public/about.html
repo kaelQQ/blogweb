@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Monolog - Your Personal Blog Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <div class="sidebar-actions">
+                <button class="collapse-sidebar" id="collapseSidebar" title="Collapse">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="close-sidebar" id="closeSidebar" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+            <a href="about.html" class="sidebar-link active"><i class="fas fa-info-circle"></i> About</a>
+            <a href="write.html" class="sidebar-link"><i class="fas fa-edit"></i> Write a Story</a>
+            <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+        </nav>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">Monolog</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="about.html" class="active">About</a>
+                <a href="write.html" class="btn btn-primary">Write a Story</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="about-page">
+            <div class="about-content">
+                <div class="about-section">
+                    <h2>About Monolog</h2>
+                    <p>Monolog is a web project developed by Data Science students from the University of Science and Technology of the Southern Philippines. Created as a partial fulfillment of the Web Development course under the guidance of instructor Mark Gaje, this platform reflects the students' applied learning and collaborative effort in building functional, user-centered web applications.</p>
+                </div>
+                
+                <div class="mission-vision">
+                    <div class="card">
+                        <h3>Our Mission</h3>
+                        <p>To provide a simple yet powerful platform for individuals to express their thoughts and share their stories with the world.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Our Vision</h3>
+                        <p>To create a community where ideas flow freely and knowledge is shared without boundaries.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-section">
+                <h2>Meet the Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h4>Qylle Christian Quiño</h4>
+                        <p>Developer</p>
+                    </div>
+                    <div class="team-member">
+                        <h4>John Vincent Gamali</h4>
+                        <p>Developer</p>
+                    </div>
+                    <div class="team-member">
+                        <h4>Visaviern Mosqueda</h4>
+                        <p>Developer</p>
+                    </div>
+                    <div class="team-member">
+                        <h4>Aubrey Quiacao</h4>
+                        <p>Developer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructor-section">
+                <div class="instructor-card">
+                    <div class="instructor-avatar">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="instructor-info">
+                        <h3>Instructor</h3>
+                        <h4>Mark Gaje</h4>
+                        <p>Web Development Course Instructor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="/" class="logo">Monolog</a>
+                    <p>Sharing stories, one post at a time.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="write.html">Write a Story</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p>University of Science and Technology of the Southern Philippines</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Monolog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+</html>
